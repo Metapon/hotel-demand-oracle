@@ -1,9 +1,14 @@
 """
 BuPlace Hotel — Web Event Scraper
-Uses Claude's web search to find Bangkok events that affect hotel demand.
+
+Architecture:
+  1. DuckDuckGo search (free, no key) -> get short result snippets
+  2. Claude Haiku -> read snippets, extract structured event JSON
+
+This keeps token usage low and avoids rate limits.
 Writes results to data/events_YYYY-MM-DD.json for demand_engine.py to load.
 
-Requires: ANTHROPIC_API_KEY in environment or config/siteminder.env
+Requires: ANTHROPIC_API_KEY in config/siteminder.env
 """
 
 import json
@@ -27,6 +32,21 @@ def _load_env() -> None:
                 os.environ.setdefault(k.strip(), v.strip())
 
 
+def _ddg_search(query: str, max_results: int = 6) -> str:
+    """Run a DuckDuckGo search and return a compact snippet string."""
+    try:
+        from ddgs import DDGS
+        results = list(DDGS().text(query, max_results=max_results))
+        lines = []
+        for r in results:
+            title = r.get("title", "")
+            body  = r.get("body", "")[:250]
+            lines.append(f"- {title}: {body}")
+        return "\n".join(lines) if lines else "[no results]"
+    except Exception as exc:
+        return f"[search error: {exc}]"
+
+
 def run_scraper(days_ahead: int = 180, log=print) -> list:
     """
     Search the web for Bangkok demand events and save to data/events_YYYY-MM-DD.json.
@@ -45,118 +65,80 @@ def run_scraper(days_ahead: int = 180, log=print) -> list:
         log("[scraper] anthropic package not installed — run: pip install anthropic")
         return []
 
-    client = anthropic.Anthropic(api_key=api_key)
+    client   = anthropic.Anthropic(api_key=api_key)
     today    = date.today()
     end_date = today + timedelta(days=days_ahead)
+    m1 = today.strftime("%B %Y")
+    m2 = (today + timedelta(days=90)).strftime("%B %Y")
 
-    log(f"[scraper] Searching for Bangkok events {today} -> {end_date} ...")
+    log(f"[scraper] Searching web for Bangkok events {today} -> {end_date} ...")
 
-    # ── Phase 1: web search ───────────────────────────────────────────────────
-    search_queries = [
-        f"Bangkok concerts festivals events {today.strftime('%B %Y')} {(today + timedelta(days=60)).strftime('%B %Y')}",
-        f"Bangkok international conference exhibition BITEC IMPACT QSNCC {today.year}",
-        f"Bangkok sports events marathon tournament {today.year}",
-        f"Thailand teacher licensing exam krusapa teachers council exam {today.year}",
-        f"Bangkok large events Salaya Nakhon Pathom nearby hotel demand {today.year}",
-        f"new airline routes Bangkok BKK DMK {today.year} tourism",
+    # ── Phase 1: DuckDuckGo searches (snippets only, no token cost) ───────────
+    queries = [
+        f"Bangkok events concerts festivals {m1} {m2}",
+        f"Bangkok BITEC IMPACT QSNCC conference exhibition {today.year}",
+        f"Thailand teacher licensing exam krusapa {today.year}",
+        f"Bangkok marathon sports tournament {today.year}",
+        f"Bangkok hotel demand tourism {m1}",
     ]
 
-    search_prompt = f"""Search the web using these queries one at a time and compile all findings:
+    all_snippets = []
+    for q in queries:
+        log(f"[scraper]   Searching: {q}")
+        snippets = _ddg_search(q, max_results=5)
+        all_snippets.append(f"Query: {q}\n{snippets}")
 
-Queries:
-{chr(10).join(f'- {q}' for q in search_queries)}
+    raw_text = "\n\n".join(all_snippets)
+    log(f"[scraper] Search complete. Asking Claude to extract events ...")
 
-For each event or demand signal found, note:
-1. Event name (exact)
-2. Date(s) — specific dates if available
-3. Venue / location in Bangkok or nearby
-4. Expected attendance scale (small <1k, medium 1k-10k, large >10k)
-5. Which visitor segment it attracts: Thai domestic, Chinese tourists, \
-Asian tourists (JP/KR/SG), European/Western, or mixed
-6. How strongly it would affect overnight hotel demand (high/medium/low)
+    # ── Phase 2: Claude Haiku extracts structured events from snippets ─────────
+    prompt = f"""You are a hotel revenue analyst. Extract upcoming events from these web search snippets
+that would increase hotel demand in Bangkok between {today} and {end_date}.
 
-Pay special attention to:
-- Teacher certification exams (krusapa): thousands of upcountry Thai teachers \
-travel to Bangkok and need overnight accommodation
-- Chinese group tours and FIT demand signals
-- Large conventions that fill Bangkok hotels
-- Any events near Phutthamonthon / Salaya / Nakhon Pathom area
+SEARCH RESULTS:
+{raw_text[:5000]}
 
-Date range of interest: {today} to {end_date}
-"""
-
-    try:
-        search_response = client.beta.messages.create(
-            model="claude-sonnet-4-6",
-            max_tokens=4096,
-            tools=[{"type": "web_search_20250305", "name": "web_search"}],
-            messages=[{"role": "user", "content": search_prompt}],
-            betas=["web-search-2025-03-05"],
-        )
-        raw_findings = "\n".join(
-            block.text for block in search_response.content
-            if hasattr(block, "text")
-        )
-        log(f"[scraper] Web search complete. Extracting structured events ...")
-    except Exception as exc:
-        log(f"[scraper] Web search failed: {exc}")
-        return []
-
-    # ── Phase 2: structure the findings into JSON ─────────────────────────────
-    structure_prompt = f"""Based on these Bangkok event findings:
-
-{raw_findings}
-
-Convert to JSON. Return ONLY the raw JSON object — no markdown, no explanation.
-
-Schema:
+Return ONLY a valid JSON object (no markdown, no explanation):
 {{
   "scraped_date": "{today}",
-  "source_summary": "2-3 sentence summary of demand outlook based on what you found",
+  "source_summary": "1-2 sentences summarising the demand outlook for Bangkok hotels",
   "events": [
     {{
       "name": "Event name",
       "date_start": "YYYY-MM-DD",
       "date_end": "YYYY-MM-DD",
-      "venue": "Venue name or area",
-      "type": "concert|festival|conference|exam|sports|cultural|tourism|other",
+      "type": "concert|festival|conference|exam|sports|cultural|other",
       "segment": "thai|chinese|asian|european|all",
-      "boost": 20,
-      "impact": "high|medium|low",
-      "note": "One sentence on why this drives hotel demand"
+      "boost": 18,
+      "note": "Why this drives overnight hotel stays"
     }}
   ]
 }}
 
-Boost scoring guide:
-- Teacher exam (krusapa, upcountry teachers overnight): 25, segment "thai"
-- Major concert / music festival (10k+ crowd): 20-25, varies
-- International trade show / conference (BITEC/IMPACT): 15-20, segment "all"
-- Sports event / marathon: 12-15, varies
-- Cultural festival (domestic): 14-18, segment "thai"
-- New airline route / tourism campaign: 8-12, segment varies
-- Small local event (<1k): 5-8
+Boost scoring:
+- Teacher licensing exam (krusapa) — upcountry teachers stay overnight: 25, segment "thai"
+- Major concert / music festival (10k+ attendance): 20, segment varies
+- International conference at BITEC / IMPACT / QSNCC: 16, segment "all"
+- Sports event / marathon: 12, segment varies
+- Cultural / local festival: 14, segment "thai"
+- Tourism campaign / new airline route: 8, segment varies
 
-Only include events from {today} to {end_date}.
-If date is uncertain, use your best estimate and note it.
-If no events found for a category, simply omit it.
-"""
+Only include events that fall between {today} and {end_date}.
+If a date is approximate, use your best estimate.
+Return an empty events list if nothing relevant found — do not invent events."""
 
     try:
-        struct_response = client.messages.create(
-            model="claude-sonnet-4-6",
-            max_tokens=3000,
-            messages=[{"role": "user", "content": structure_prompt}],
+        response = client.messages.create(
+            model="claude-haiku-4-5-20251001",
+            max_tokens=2000,
+            messages=[{"role": "user", "content": prompt}],
         )
-        json_text = struct_response.content[0].text.strip()
-
-        # Strip markdown code fences if present
+        json_text = response.content[0].text.strip()
         json_text = re.sub(r"^```[a-z]*\n?", "", json_text)
-        json_text = re.sub(r"\n?```$", "", json_text)
-
+        json_text = re.sub(r"\n?```$", "", json_text.strip())
         events_data = json.loads(json_text)
-    except (json.JSONDecodeError, IndexError, Exception) as exc:
-        log(f"[scraper] JSON parsing failed: {exc}")
+    except Exception as exc:
+        log(f"[scraper] Claude extraction failed: {exc}")
         events_data = {"scraped_date": str(today), "events": []}
 
     # ── Save ──────────────────────────────────────────────────────────────────
@@ -180,7 +162,8 @@ if __name__ == "__main__":
     if events:
         print(f"\nFound {len(events)} events:")
         for ev in events:
-            print(f"  {ev['date_start']} - {ev['date_end']}  [{ev['boost']:>2}]  {ev['name']}")
+            print(f"  {ev['date_start']} -> {ev['date_end']}  "
+                  f"[boost +{ev.get('boost','?'):>2}]  {ev['name']}")
     else:
-        print("No events found (check API key or network).")
+        print("No events found.")
         sys.exit(1)

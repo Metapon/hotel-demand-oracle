@@ -14,7 +14,11 @@
       "Bash(git commit *)",
       "Bash(git branch *)",
       "Bash(git remote *)",
-      "Bash(git push *)"
+      "Bash(git push *)",
+      "Bash(/c/Users/LEMEL/AppData/Local/Programs/Python/Python313/python.exe scraper.py)",
+      "Bash(/c/Users/LEMEL/AppData/Local/Programs/Python/Python313/python.exe -m pip install duckduckgo-search --quiet)",
+      "Bash(/c/Users/LEMEL/AppData/Local/Programs/Python/Python313/python.exe -m pip install ddgs --quiet)",
+      "Bash(git reset *)"
     ]
   }
 }

@@ -3,3 +3,5 @@ __pycache__/
 *.pyc
 .env
 config/siteminder.env
+config/
+starting prompt/siteminder.env

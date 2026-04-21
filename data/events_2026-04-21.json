@@ -1,0 +1,42 @@
+{
+  "scraped_date": "2026-04-21",
+  "source_summary": "Bangkok hotel demand during April-October 2026 will be supported by major international conferences and exhibitions at key venues (BITEC, QSNCC), along with music concerts and festivals attracting diverse visitor segments.",
+  "events": [
+    {
+      "name": "Sustainable Energy Technology Asia (SETA) & Solar+Storage Asia (SSA)",
+      "date_start": "2026-05-20",
+      "date_end": "2026-05-22",
+      "type": "conference",
+      "segment": "all",
+      "boost": 16,
+      "note": "Large-scale energy technology conference attracting international delegates requiring multi-night stays"
+    },
+    {
+      "name": "Jewellery & Gem ASEAN Bangkok (JGAB) 2026",
+      "date_start": "2026-06-15",
+      "date_end": "2026-06-17",
+      "type": "conference",
+      "segment": "all",
+      "boost": 16,
+      "note": "Premier international trade platform for jewellery industry with 350+ brands from 15 countries at QSNCC"
+    },
+    {
+      "name": "Bangkok Concert Calendar 2026 - Multiple K-pop, Rock, Pop Events",
+      "date_start": "2026-04-21",
+      "date_end": "2026-10-18",
+      "type": "concert",
+      "segment": "asian",
+      "boost": 20,
+      "note": "34+ concerts across multiple venues (Impact Arena, GMM Live House) with international and K-pop tours generating strong visitor demand"
+    },
+    {
+      "name": "S2O Songkran Festival",
+      "date_start": "2026-04-21",
+      "date_end": "2026-04-30",
+      "type": "festival",
+      "segment": "all",
+      "boost": 14,
+      "note": "Major music festival during Songkran season attracting both domestic and international visitors"
+    }
+  ]
+}
