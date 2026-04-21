@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pip install *)",
+      "Bash(python demand_predictor.py)",
+      "Bash(python3 demand_predictor.py)",
+      "Bash(/c/Users/LEMEL/AppData/Local/Programs/Python/Python313/python.exe demand_predictor.py)",
+      "Bash(/c/Users/LEMEL/AppData/Local/Programs/Python/Python313/python.exe -m pip install anthropic --quiet)",
+      "Bash(/c/Users/LEMEL/AppData/Local/Programs/Python/Python313/python.exe -c ' *)",
+      "Bash(gh auth *)",
+      "Bash(git init *)",
+      "Bash(git add *)"
+    ]
+  }
+}
