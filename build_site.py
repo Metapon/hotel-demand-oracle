@@ -78,6 +78,70 @@ def _archive_links_html() -> str:
     return items
 
 
+def _events_calendar_html(df: pd.DataFrame) -> str:
+    """Full events table grouped by month, showing all notable days."""
+    # Include days with events OR score >= 65
+    notable = df[(df["events"] != "-") | (df["score"] >= 65)].copy()
+    if notable.empty:
+        return "<p style='color:#888'>No notable events found in the forecast window.</p>"
+
+    html = ""
+    current_month = None
+
+    for _, row in notable.iterrows():
+        month_label = row["date"].strftime("%B %Y")
+        if month_label != current_month:
+            if current_month is not None:
+                html += "</div>"  # close previous month group
+            current_month = month_label
+            html += f'<div class="cal-month"><div class="cal-month-header">{month_label}</div>'
+
+        score = int(row["score"])
+        if score >= 80:
+            badge_cls, dot_cls = "badge-peak", "dot-peak"
+        elif score >= 65:
+            badge_cls, dot_cls = "badge-high", "dot-high"
+        else:
+            badge_cls, dot_cls = "badge-normal", "dot-normal"
+
+        events_raw = str(row["events"])
+        has_events = events_raw not in ("-", "", "nan")
+
+        event_tags = ""
+        if has_events:
+            for ev in events_raw.split(" | "):
+                is_web = ev.startswith("[web] ")
+                label  = ev[6:] if is_web else ev
+                tag_cls = "ev-tag ev-web" if is_web else "ev-tag ev-static"
+                event_tags += f'<span class="{tag_cls}">{label}</span> '
+
+        prices = ""
+        for col in df.columns:
+            if col.startswith("price_"):
+                room = col.replace("price_", "")
+                prices += f'<span class="cal-price">{room}: {int(row[col]):,} THB</span>'
+
+        html += f"""
+        <div class="cal-row">
+          <div class="cal-left">
+            <span class="{dot_cls}"></span>
+            <div>
+              <span class="cal-date">{row['date'].strftime('%d %b')}</span>
+              <span class="cal-dow">{row['day']}</span>
+              <div class="cal-events">{event_tags if event_tags else '<span class="cal-no-event">No specific event</span>'}</div>
+            </div>
+          </div>
+          <div class="cal-right">
+            {prices}
+            <span class="badge {badge_cls}">{score}</span>
+          </div>
+        </div>"""
+
+    if current_month:
+        html += "</div>"  # close last month group
+    return html
+
+
 def build_site(df: pd.DataFrame, log=print) -> None:
     today = date.today()
 
@@ -114,10 +178,11 @@ def build_site(df: pd.DataFrame, log=print) -> None:
         if s >= 48: return "Normal"
         return "Low"
 
-    events_summary = _read_latest_events_summary()
-    peak_days_html  = _peak_days_html(df.head(30))
-    archive_html    = _archive_links_html()
-    last_updated    = today.strftime("%A, %d %B %Y")
+    events_summary   = _read_latest_events_summary()
+    peak_days_html   = _peak_days_html(df.head(30))
+    archive_html     = _archive_links_html()
+    events_cal_html  = _events_calendar_html(df)
+    last_updated     = today.strftime("%A, %d %B %Y")
     scrape_note     = (
         f'<p class="scrape-note">{events_summary}</p>'
         if events_summary else
@@ -258,6 +323,71 @@ def build_site(df: pd.DataFrame, log=print) -> None:
     line-height: 1.6;
   }}
 
+  /* ── Events calendar ── */
+  .cal-section {{
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 0 32px 32px;
+  }}
+  .cal-section-title {{
+    font-size: 1rem;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #e8e8e8;
+  }}
+  .cal-section-title span {{
+    font-size: 0.78rem;
+    font-weight: 400;
+    color: #aaa;
+    margin-left: 12px;
+  }}
+  .cal-month {{
+    margin-bottom: 24px;
+  }}
+  .cal-month-header {{
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #aaa;
+    padding: 6px 0;
+    margin-bottom: 4px;
+    border-bottom: 1px solid #f0f0f0;
+  }}
+  .cal-row {{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 9px 12px;
+    border-radius: 8px;
+    margin-bottom: 3px;
+    background: #fff;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    flex-wrap: wrap;
+    gap: 8px;
+  }}
+  .cal-row:hover {{ background: #fafafa; }}
+  .cal-left {{ display: flex; align-items: flex-start; gap: 10px; }}
+  .cal-right {{ display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }}
+  .cal-date {{ font-weight: 700; font-size: 0.9rem; }}
+  .cal-dow  {{ font-size: 0.78rem; color: #aaa; margin-left: 4px; }}
+  .cal-events {{ margin-top: 3px; display: flex; flex-wrap: wrap; gap: 4px; }}
+  .cal-no-event {{ font-size: 0.75rem; color: #ccc; font-style: italic; }}
+  .cal-price {{ font-size: 0.78rem; color: #666; white-space: nowrap; }}
+  .ev-tag {{
+    font-size: 0.72rem;
+    padding: 2px 7px;
+    border-radius: 10px;
+    white-space: nowrap;
+  }}
+  .ev-static {{ background: #eef2ff; color: #4361ee; }}
+  .ev-web    {{ background: #fff3e0; color: #e67e00; }}
+  .dot-peak   {{ width:10px; height:10px; border-radius:50%; background:#c1121f; flex-shrink:0; margin-top:5px; }}
+  .dot-high   {{ width:10px; height:10px; border-radius:50%; background:#e76f51; flex-shrink:0; margin-top:5px; }}
+  .dot-normal {{ width:10px; height:10px; border-radius:50%; background:#2a9d8f; flex-shrink:0; margin-top:5px; }}
+
   /* ── Footer ── */
   footer {{
     text-align: center;
@@ -329,6 +459,15 @@ def build_site(df: pd.DataFrame, log=print) -> None:
     </div>
 
   </div>
+</div>
+
+<!-- Events Calendar -->
+<div class="cal-section">
+  <div class="cal-section-title">
+    Demand Calendar &mdash; All Notable Days
+    <span>Blue tags = calendar events &nbsp;&bull;&nbsp; Orange tags = found by web search &nbsp;&bull;&nbsp; Score &ge; 65 shown</span>
+  </div>
+  {events_cal_html}
 </div>
 
 <footer>

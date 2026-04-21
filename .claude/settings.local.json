@@ -9,7 +9,12 @@
       "Bash(/c/Users/LEMEL/AppData/Local/Programs/Python/Python313/python.exe -c ' *)",
       "Bash(gh auth *)",
       "Bash(git init *)",
-      "Bash(git add *)"
+      "Bash(git add *)",
+      "Bash(git config *)",
+      "Bash(git commit *)",
+      "Bash(git branch *)",
+      "Bash(git remote *)",
+      "Bash(git push *)"
     ]
   }
 }

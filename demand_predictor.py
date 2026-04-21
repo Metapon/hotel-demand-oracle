@@ -16,7 +16,7 @@ import pandas as pd
 import plotly.graph_objects as go
 
 from config import HOTEL
-from demand_engine import get_demand_score
+from demand_engine import get_demand_score, MONTHLY_BASE
 
 BASE_DIR = pathlib.Path(__file__).parent
 
@@ -56,6 +56,44 @@ def demand_label(score: int) -> str:
         return "Low"
 
 
+def demand_reason(d: date, event_labels: list) -> str:
+    """Human-readable explanation shown in hover tooltip."""
+    if event_labels:
+        lines = []
+        for e in event_labels:
+            if e.startswith("[web] "):
+                lines.append("* " + e[6:])   # mark web-sourced events
+            else:
+                lines.append(e)
+        return "<br>".join(lines)
+
+    # No events — explain via season + day of week
+    parts = []
+    base = MONTHLY_BASE[d.month]
+    if base >= 70:
+        parts.append("Peak tourist season")
+    elif base >= 60:
+        parts.append("High tourist season")
+    elif base >= 50:
+        parts.append("Mid season")
+    elif base <= 42:
+        parts.append("Low season (rainy period)")
+
+    dow = d.weekday()
+    if dow == 5:
+        parts.append("Saturday — highest occupancy day")
+    elif dow == 4:
+        parts.append("Friday — strong arrival day")
+    elif dow == 3:
+        parts.append("Thursday — pre-weekend")
+    elif dow == 6:
+        parts.append("Sunday — late stays")
+    elif dow == 0:
+        parts.append("Monday — quiet start of week")
+
+    return "<br>".join(parts) if parts else "Standard weekday"
+
+
 # ── Main ──────────────────────────────────────────────────────────────────────
 
 def main():
@@ -75,7 +113,8 @@ def main():
             "day":    d.strftime("%a"),
             "score":  score,
             "level":  demand_label(score),
-            "events": " |".join(event_labels) if event_labels else "-",
+            "events": " | ".join(event_labels) if event_labels else "-",
+            "reason": demand_reason(d, event_labels),
             "color":  bar_color(score),
         }
         for rname, rc in rooms.items():
@@ -89,12 +128,12 @@ def main():
     # ── Plotly chart ──────────────────────────────────────────────────────────
     price_cols = [f"price_{r}" for r in room_names]
 
-    # customdata columns: [events, day, price_Studio, price_Family, level]
-    custom_cols = ["events", "day"] + price_cols + ["level"]
+    # customdata: [reason, day, price_Studio, price_Family, level]
+    custom_cols = ["reason", "day"] + price_cols + ["level"]
     custom = df[custom_cols].values
 
     price_hover = "".join(
-        f"{r}: ~%{{customdata[{i+2}]:,}} {cur}<br>"
+        f"  {r}: ~%{{customdata[{i+2}]:,}} {cur}<br>"
         for i, r in enumerate(room_names)
     )
 
@@ -109,9 +148,14 @@ def main():
         customdata=custom,
         hovertemplate=(
             "<b>%{x|%A, %d %b %Y}</b><br>"
-            "Demand: <b>%{y}/100</b> (%{customdata[4]})<br>"
+            "Score: <b>%{y} / 100</b>  —  %{customdata[4]}<br>"
+            "<br>"
+            "<b>Suggested prices:</b><br>"
             + price_hover +
-            "<i>%{customdata[0]}</i><extra></extra>"
+            "<br>"
+            "<b>Demand drivers:</b><br>"
+            "  %{customdata[0]}"
+            "<extra></extra>"
         ),
         name="Demand Score",
         showlegend=False,
@@ -133,7 +177,7 @@ def main():
     # Annotate significant event spikes (score ≥ 72 with an event label)
     annotated = df[(df["score"] >= 72) & (df["events"] != "-")]
     for _, row in annotated.iterrows():
-        first = row["events"].split(" |")[0]
+        first = row["events"].split(" | ")[0].replace("[web] ", "")
         fig.add_annotation(
             x=row["date"],
             y=row["score"] + 3,

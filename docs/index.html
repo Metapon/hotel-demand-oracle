@@ -132,6 +132,71 @@
     line-height: 1.6;
   }
 
+  /* ── Events calendar ── */
+  .cal-section {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 0 32px 32px;
+  }
+  .cal-section-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #e8e8e8;
+  }
+  .cal-section-title span {
+    font-size: 0.78rem;
+    font-weight: 400;
+    color: #aaa;
+    margin-left: 12px;
+  }
+  .cal-month {
+    margin-bottom: 24px;
+  }
+  .cal-month-header {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #aaa;
+    padding: 6px 0;
+    margin-bottom: 4px;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  .cal-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 9px 12px;
+    border-radius: 8px;
+    margin-bottom: 3px;
+    background: #fff;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .cal-row:hover { background: #fafafa; }
+  .cal-left { display: flex; align-items: flex-start; gap: 10px; }
+  .cal-right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .cal-date { font-weight: 700; font-size: 0.9rem; }
+  .cal-dow  { font-size: 0.78rem; color: #aaa; margin-left: 4px; }
+  .cal-events { margin-top: 3px; display: flex; flex-wrap: wrap; gap: 4px; }
+  .cal-no-event { font-size: 0.75rem; color: #ccc; font-style: italic; }
+  .cal-price { font-size: 0.78rem; color: #666; white-space: nowrap; }
+  .ev-tag {
+    font-size: 0.72rem;
+    padding: 2px 7px;
+    border-radius: 10px;
+    white-space: nowrap;
+  }
+  .ev-static { background: #eef2ff; color: #4361ee; }
+  .ev-web    { background: #fff3e0; color: #e67e00; }
+  .dot-peak   { width:10px; height:10px; border-radius:50%; background:#c1121f; flex-shrink:0; margin-top:5px; }
+  .dot-high   { width:10px; height:10px; border-radius:50%; background:#e76f51; flex-shrink:0; margin-top:5px; }
+  .dot-normal { width:10px; height:10px; border-radius:50%; background:#2a9d8f; flex-shrink:0; margin-top:5px; }
+
   /* ── Footer ── */
   footer {
     text-align: center;
@@ -260,6 +325,673 @@
     </div>
 
   </div>
+</div>
+
+<!-- Events Calendar -->
+<div class="cal-section">
+  <div class="cal-section-title">
+    Demand Calendar &mdash; All Notable Days
+    <span>Blue tags = calendar events &nbsp;&bull;&nbsp; Orange tags = found by web search &nbsp;&bull;&nbsp; Score &ge; 65 shown</span>
+  </div>
+  <div class="cal-month"><div class="cal-month-header">April 2026</div>
+        <div class="cal-row">
+          <div class="cal-left">
+            <span class="dot-high"></span>
+            <div>
+              <span class="cal-date">21 Apr</span>
+              <span class="cal-dow">Tue</span>
+              <div class="cal-events"><span class="cal-no-event">No specific event</span></div>
+            </div>
+          </div>
+          <div class="cal-right">
+            <span class="cal-price">Studio: 1,400 THB</span><span class="cal-price">Family: 2,650 THB</span>
+            <span class="badge badge-high">65</span>
+          </div>
+        </div>
+        <div class="cal-row">
+          <div class="cal-left">
+            <span class="dot-high"></span>
+            <div>
+              <span class="cal-date">22 Apr</span>
+              <span class="cal-dow">Wed</span>
+              <div class="cal-events"><span class="cal-no-event">No specific event</span></div>
+            </div>
+          </div>
+          <div class="cal-right">
+            <span class="cal-price">Studio: 1,500 THB</span><span class="cal-price">Family: 2,850 THB</span>
+            <span class="badge badge-high">68</span>
+          </div>
+        </div>
+        <div class="cal-row">
+          <div class="cal-left">
+            <span class="dot-high"></span>
+            <div>
+              <span class="cal-date">23 Apr</span>
+              <span class="cal-dow">Thu</span>
+              <div class="cal-events"><span class="cal-no-event">No specific event</span></div>
+            </div>
+          </div>
+          <div class="cal-right">
+            <span class="cal-price">Studio: 1,700 THB</span><span class="cal-price">Family: 3,250 THB</span>
+            <span class="badge badge-high">73</span>
+          </div>
+        </div>
+        <div class="cal-row">
+          <div class="cal-left">
+            <span class="dot-peak"></span>
+            <div>
+              <span class="cal-date">24 Apr</span>
+              <span class="cal-dow">Fri</span>
+              <div class="cal-events"><span class="cal-no-event">No specific event</span></div>
+            </div>
+          </div>
+          <div class="cal-right">
+            <span class="cal-price">Studio: 2,050 THB</span><span class="cal-price">Family: 3,900 THB</span>
+            <span class="badge badge-peak">81</span>
+          </div>
+        </div>
+        <div class="cal-row">
+          <div class="cal-left">
+            <span class="dot-peak"></span>
+            <div>
+              <span class="cal-date">25 Apr</span>
+              <span class="cal-dow">Sat</span>
+              <div class="cal-events"><span class="cal-no-event">No specific event</span></div>
+            </div>
+          </div>
+          <div class="cal-right">
+            <span class="cal-price">Studio: 2,250 THB</span><span class="cal-price">Family: 4,250 THB</span>
+            <span class="badge badge-peak">85</span>
+          </div>
+        </div>
+        <div class="cal-row">
+          <div class="cal-left">
+            <span class="dot-high"></span>
+            <div>
+              <span class="cal-date">26 Apr</span>
+              <span class="cal-dow">Sun</span>
+              <div class="cal-events"><span class="cal-no-event">No specific event</span></div>
+            </div>
+          </div>
+          <div class="cal-right">
+            <span class="cal-price">Studio: 1,700 THB</span><span class="cal-price">Family: 3,250 THB</span>
+            <span class="badge badge-high">73</span>
+          </div>
+        </div>
+        <div class="cal-row">
+          <div class="cal-left">
+            <span class="dot-high"></span>
+            <div>
+              <span class="cal-date">27 Apr</span>
+              <span class="cal-dow">Mon</span>
+              <div class="cal-events"><span class="cal-no-event">No specific event</span></div>
+            </div>
+          </div>
+          <div class="cal-right">
+            <span class="cal-price">Studio: 1,400 THB</span><span class="cal-price">Family: 2,650 THB</span>
+            <span class="badge badge-high">65</span>
+          </div>
+        </div>
+        <div class="cal-row">
+          <div class="cal-left">
+            <span class="dot-high"></span>
+            <div>
+              <span class="cal-date">28 Apr</span>
+              <span class="cal-dow">Tue</span>
+              <div class="cal-events"><span class="cal-no-event">No specific event</span></div>
+            </div>
+          </div>
+          <div class="cal-right">
+            <span class="cal-price">Studio: 1,400 THB</span><span class="cal-price">Family: 2,650 THB</span>
+            <span class="badge badge-high">65</span>
+          </div>
+        </div>
+        <div class="cal-row">
+          <div class="cal-left">
+            <span class="dot-peak"></span>
+            <div>
+              <span class="cal-date">29 Apr</span>
+              <span class="cal-dow">Wed</span>
+              <div class="cal-events"><span class="ev-tag ev-static">JP/KR Golden Week</span> </div>
+            </div>
+          </div>
+          <div class="cal-right">
+            <span class="cal-price">Studio: 2,100 THB</span><span class="cal-price">Family: 4,000 THB</span>
+            <span class="badge badge-peak">82</span>
+          </div>
+        </div>
+        <div class="cal-row">
+          <div class="cal-left">
+            <span class="dot-peak"></span>
+            <div>
+              <span class="cal-date">30 Apr</span>
+              <span class="cal-dow">Thu</span>
+              <div class="cal-events"><span class="ev-tag ev-static">JP/KR Golden Week</span> </div>
+            </div>
+          </div>
+          <div class="cal-right">
+            <span class="cal-price">Studio: 2,350 THB</span><span class="cal-price">Family: 4,450 THB</span>
+            <span class="badge badge-peak">87</span>
+          </div>
+        </div></div><div class="cal-month"><div class="cal-month-header">May 2026</div>
+        <div class="cal-row">
+          <div class="cal-left">
+            <span class="dot-peak"></span>
+            <div>
+              <span class="cal-date">01 May</span>
+              <span class="cal-dow">Fri</span>
+              <div class="cal-events"><span class="ev-tag ev-static">JP/KR Golden Week</span> <span class="ev-tag ev-static">Labour Day</span> <span class="ev-tag ev-static">China Labour Day</span> </div>
+            </div>
+          </div>
+          <div class="cal-right">
+            <span class="cal-price">Studio: 2,900 THB</span><span class="cal-price">Family: 5,500 THB</span>
+            <span class="badge badge-peak">98</span>
+          </div>
+        </div>
+        <div class="cal-row">
+          <div class="cal-left">
+            <span class="dot-peak"></span>
+            <div>
+              <span class="cal-date">02 May</span>
+              <span class="cal-dow">Sat</span>
+              <div class="cal-events"><span class="ev-tag ev-static">JP/KR Golden Week</span> <span class="ev-tag ev-static">China Labour Day</span> </div>
+            </div>
+          </div>
+          <div class="cal-right">
+            <span class="cal-price">Studio: 2,400 THB</span><span class="cal-price">Family: 4,500 THB</span>
+            <span class="badge badge-peak">88</span>
+          </div>
+        </div>
+        <div class="cal-row">
+          <div class="cal-left">
+            <span class="dot-high"></span>
+            <div>
+              <span class="cal-date">03 May</span>
+              <span class="cal-dow">Sun</span>
+              <div class="cal-events"><span class="ev-tag ev-static">JP/KR Golden Week</span> <span class="ev-tag ev-static">China Labour Day</span> </div>
+            </div>
+          </div>
+          <div class="cal-right">
+            <span class="cal-price">Studio: 1,850 THB</span><span class="cal-price">Family: 3,450 THB</span>
+            <span class="badge badge-high">76</span>
+          </div>
+        </div>
+        <div class="cal-row">
+          <div class="cal-left">
+            <span class="dot-high"></span>
+            <div>
+              <span class="cal-date">04 May</span>
+              <span class="cal-dow">Mon</span>
+              <div class="cal-events"><span class="ev-tag ev-static">JP/KR Golden Week</span> <span class="ev-tag ev-static">China Labour Day</span> <span class="ev-tag ev-static">Coronation Day</span> </div>
+            </div>
+          </div>
+          <div class="cal-right">
+            <span class="cal-price">Studio: 1,900 THB</span><span class="cal-price">Family: 3,650 THB</span>
+            <span class="badge badge-high">78</span>
+          </div>
+        </div>
+        <div class="cal-row">
+          <div class="cal-left">
+            <span class="dot-high"></span>
+            <div>
+              <span class="cal-date">05 May</span>
+              <span class="cal-dow">Tue</span>
+              <div class="cal-events"><span class="ev-tag ev-static">JP/KR Golden Week</span> <span class="ev-tag ev-static">China Labour Day</span> </div>
+            </div>
+          </div>
+          <div class="cal-right">
+            <span class="cal-price">Studio: 1,450 THB</span><span class="cal-price">Family: 2,700 THB</span>
+            <span class="badge badge-high">66</span>
+          </div>
+        </div></div><div class="cal-month"><div class="cal-month-header">June 2026</div>
+        <div class="cal-row">
+          <div class="cal-left">
+            <span class="dot-normal"></span>
+            <div>
+              <span class="cal-date">01 Jun</span>
+              <span class="cal-dow">Mon</span>
+              <div class="cal-events"><span class="ev-tag ev-static">Visakha Bucha</span> </div>
+            </div>
+          </div>
+          <div class="cal-right">
+            <span class="cal-price">Studio: 1,150 THB</span><span class="cal-price">Family: 2,200 THB</span>
+            <span class="badge badge-normal">58</span>
+          </div>
+        </div>
+        <div class="cal-row">
+          <div class="cal-left">
+            <span class="dot-normal"></span>
+            <div>
+              <span class="cal-date">03 Jun</span>
+              <span class="cal-dow">Wed</span>
+              <div class="cal-events"><span class="ev-tag ev-static">Queen's Birthday</span> </div>
+            </div>
+          </div>
+          <div class="cal-right">
+            <span class="cal-price">Studio: 1,150 THB</span><span class="cal-price">Family: 2,150 THB</span>
+            <span class="badge badge-normal">57</span>
+          </div>
+        </div></div><div class="cal-month"><div class="cal-month-header">July 2026</div>
+        <div class="cal-row">
+          <div class="cal-left">
+            <span class="dot-high"></span>
+            <div>
+              <span class="cal-date">04 Jul</span>
+              <span class="cal-dow">Sat</span>
+              <div class="cal-events"><span class="cal-no-event">No specific event</span></div>
+            </div>
+          </div>
+          <div class="cal-right">
+            <span class="cal-price">Studio: 1,500 THB</span><span class="cal-price">Family: 2,850 THB</span>
+            <span class="badge badge-high">68</span>
+          </div>
+        </div>
+        <div class="cal-row">
+          <div class="cal-left">
+            <span class="dot-high"></span>
+            <div>
+              <span class="cal-date">11 Jul</span>
+              <span class="cal-dow">Sat</span>
+              <div class="cal-events"><span class="cal-no-event">No specific event</span></div>
+            </div>
+          </div>
+          <div class="cal-right">
+            <span class="cal-price">Studio: 1,500 THB</span><span class="cal-price">Family: 2,850 THB</span>
+            <span class="badge badge-high">68</span>
+          </div>
+        </div>
+        <div class="cal-row">
+          <div class="cal-left">
+            <span class="dot-high"></span>
+            <div>
+              <span class="cal-date">18 Jul</span>
+              <span class="cal-dow">Sat</span>
+              <div class="cal-events"><span class="cal-no-event">No specific event</span></div>
+            </div>
+          </div>
+          <div class="cal-right">
+            <span class="cal-price">Studio: 1,500 THB</span><span class="cal-price">Family: 2,850 THB</span>
+            <span class="badge badge-high">68</span>
+          </div>
+        </div>
+        <div class="cal-row">
+          <div class="cal-left">
+            <span class="dot-high"></span>
+            <div>
+              <span class="cal-date">25 Jul</span>
+              <span class="cal-dow">Sat</span>
+              <div class="cal-events"><span class="cal-no-event">No specific event</span></div>
+            </div>
+          </div>
+          <div class="cal-right">
+            <span class="cal-price">Studio: 1,500 THB</span><span class="cal-price">Family: 2,850 THB</span>
+            <span class="badge badge-high">68</span>
+          </div>
+        </div>
+        <div class="cal-row">
+          <div class="cal-left">
+            <span class="dot-normal"></span>
+            <div>
+              <span class="cal-date">27 Jul</span>
+              <span class="cal-dow">Mon</span>
+              <div class="cal-events"><span class="ev-tag ev-static">Asalha Bucha</span> </div>
+            </div>
+          </div>
+          <div class="cal-right">
+            <span class="cal-price">Studio: 1,300 THB</span><span class="cal-price">Family: 2,450 THB</span>
+            <span class="badge badge-normal">62</span>
+          </div>
+        </div>
+        <div class="cal-row">
+          <div class="cal-left">
+            <span class="dot-normal"></span>
+            <div>
+              <span class="cal-date">28 Jul</span>
+              <span class="cal-dow">Tue</span>
+              <div class="cal-events"><span class="ev-tag ev-static">King's Birthday</span> </div>
+            </div>
+          </div>
+          <div class="cal-right">
+            <span class="cal-price">Studio: 1,300 THB</span><span class="cal-price">Family: 2,450 THB</span>
+            <span class="badge badge-normal">62</span>
+          </div>
+        </div></div><div class="cal-month"><div class="cal-month-header">August 2026</div>
+        <div class="cal-row">
+          <div class="cal-left">
+            <span class="dot-high"></span>
+            <div>
+              <span class="cal-date">01 Aug</span>
+              <span class="cal-dow">Sat</span>
+              <div class="cal-events"><span class="cal-no-event">No specific event</span></div>
+            </div>
+          </div>
+          <div class="cal-right">
+            <span class="cal-price">Studio: 1,650 THB</span><span class="cal-price">Family: 3,150 THB</span>
+            <span class="badge badge-high">72</span>
+          </div>
+        </div>
+        <div class="cal-row">
+          <div class="cal-left">
+            <span class="dot-high"></span>
+            <div>
+              <span class="cal-date">07 Aug</span>
+              <span class="cal-dow">Fri</span>
+              <div class="cal-events"><span class="cal-no-event">No specific event</span></div>
+            </div>
+          </div>
+          <div class="cal-right">
+            <span class="cal-price">Studio: 1,500 THB</span><span class="cal-price">Family: 2,850 THB</span>
+            <span class="badge badge-high">68</span>
+          </div>
+        </div>
+        <div class="cal-row">
+          <div class="cal-left">
+            <span class="dot-high"></span>
+            <div>
+              <span class="cal-date">08 Aug</span>
+              <span class="cal-dow">Sat</span>
+              <div class="cal-events"><span class="cal-no-event">No specific event</span></div>
+            </div>
+          </div>
+          <div class="cal-right">
+            <span class="cal-price">Studio: 1,650 THB</span><span class="cal-price">Family: 3,150 THB</span>
+            <span class="badge badge-high">72</span>
+          </div>
+        </div>
+        <div class="cal-row">
+          <div class="cal-left">
+            <span class="dot-high"></span>
+            <div>
+              <span class="cal-date">12 Aug</span>
+              <span class="cal-dow">Wed</span>
+              <div class="cal-events"><span class="ev-tag ev-static">Mother's Day</span> </div>
+            </div>
+          </div>
+          <div class="cal-right">
+            <span class="cal-price">Studio: 1,550 THB</span><span class="cal-price">Family: 2,950 THB</span>
+            <span class="badge badge-high">69</span>
+          </div>
+        </div>
+        <div class="cal-row">
+          <div class="cal-left">
+            <span class="dot-high"></span>
+            <div>
+              <span class="cal-date">14 Aug</span>
+              <span class="cal-dow">Fri</span>
+              <div class="cal-events"><span class="cal-no-event">No specific event</span></div>
+            </div>
+          </div>
+          <div class="cal-right">
+            <span class="cal-price">Studio: 1,500 THB</span><span class="cal-price">Family: 2,850 THB</span>
+            <span class="badge badge-high">68</span>
+          </div>
+        </div>
+        <div class="cal-row">
+          <div class="cal-left">
+            <span class="dot-high"></span>
+            <div>
+              <span class="cal-date">15 Aug</span>
+              <span class="cal-dow">Sat</span>
+              <div class="cal-events"><span class="cal-no-event">No specific event</span></div>
+            </div>
+          </div>
+          <div class="cal-right">
+            <span class="cal-price">Studio: 1,650 THB</span><span class="cal-price">Family: 3,150 THB</span>
+            <span class="badge badge-high">72</span>
+          </div>
+        </div>
+        <div class="cal-row">
+          <div class="cal-left">
+            <span class="dot-high"></span>
+            <div>
+              <span class="cal-date">21 Aug</span>
+              <span class="cal-dow">Fri</span>
+              <div class="cal-events"><span class="cal-no-event">No specific event</span></div>
+            </div>
+          </div>
+          <div class="cal-right">
+            <span class="cal-price">Studio: 1,500 THB</span><span class="cal-price">Family: 2,850 THB</span>
+            <span class="badge badge-high">68</span>
+          </div>
+        </div>
+        <div class="cal-row">
+          <div class="cal-left">
+            <span class="dot-high"></span>
+            <div>
+              <span class="cal-date">22 Aug</span>
+              <span class="cal-dow">Sat</span>
+              <div class="cal-events"><span class="cal-no-event">No specific event</span></div>
+            </div>
+          </div>
+          <div class="cal-right">
+            <span class="cal-price">Studio: 1,650 THB</span><span class="cal-price">Family: 3,150 THB</span>
+            <span class="badge badge-high">72</span>
+          </div>
+        </div>
+        <div class="cal-row">
+          <div class="cal-left">
+            <span class="dot-high"></span>
+            <div>
+              <span class="cal-date">28 Aug</span>
+              <span class="cal-dow">Fri</span>
+              <div class="cal-events"><span class="cal-no-event">No specific event</span></div>
+            </div>
+          </div>
+          <div class="cal-right">
+            <span class="cal-price">Studio: 1,500 THB</span><span class="cal-price">Family: 2,850 THB</span>
+            <span class="badge badge-high">68</span>
+          </div>
+        </div>
+        <div class="cal-row">
+          <div class="cal-left">
+            <span class="dot-high"></span>
+            <div>
+              <span class="cal-date">29 Aug</span>
+              <span class="cal-dow">Sat</span>
+              <div class="cal-events"><span class="cal-no-event">No specific event</span></div>
+            </div>
+          </div>
+          <div class="cal-right">
+            <span class="cal-price">Studio: 1,650 THB</span><span class="cal-price">Family: 3,150 THB</span>
+            <span class="badge badge-high">72</span>
+          </div>
+        </div></div><div class="cal-month"><div class="cal-month-header">October 2026</div>
+        <div class="cal-row">
+          <div class="cal-left">
+            <span class="dot-peak"></span>
+            <div>
+              <span class="cal-date">01 Oct</span>
+              <span class="cal-dow">Thu</span>
+              <div class="cal-events"><span class="ev-tag ev-static">China Golden Week</span> </div>
+            </div>
+          </div>
+          <div class="cal-right">
+            <span class="cal-price">Studio: 2,600 THB</span><span class="cal-price">Family: 4,900 THB</span>
+            <span class="badge badge-peak">92</span>
+          </div>
+        </div>
+        <div class="cal-row">
+          <div class="cal-left">
+            <span class="dot-peak"></span>
+            <div>
+              <span class="cal-date">02 Oct</span>
+              <span class="cal-dow">Fri</span>
+              <div class="cal-events"><span class="ev-tag ev-static">China Golden Week</span> </div>
+            </div>
+          </div>
+          <div class="cal-right">
+            <span class="cal-price">Studio: 3,000 THB</span><span class="cal-price">Family: 5,700 THB</span>
+            <span class="badge badge-peak">100</span>
+          </div>
+        </div>
+        <div class="cal-row">
+          <div class="cal-left">
+            <span class="dot-peak"></span>
+            <div>
+              <span class="cal-date">03 Oct</span>
+              <span class="cal-dow">Sat</span>
+              <div class="cal-events"><span class="ev-tag ev-static">China Golden Week</span> </div>
+            </div>
+          </div>
+          <div class="cal-right">
+            <span class="cal-price">Studio: 3,000 THB</span><span class="cal-price">Family: 5,700 THB</span>
+            <span class="badge badge-peak">100</span>
+          </div>
+        </div>
+        <div class="cal-row">
+          <div class="cal-left">
+            <span class="dot-peak"></span>
+            <div>
+              <span class="cal-date">04 Oct</span>
+              <span class="cal-dow">Sun</span>
+              <div class="cal-events"><span class="ev-tag ev-static">China Golden Week</span> </div>
+            </div>
+          </div>
+          <div class="cal-right">
+            <span class="cal-price">Studio: 2,400 THB</span><span class="cal-price">Family: 4,500 THB</span>
+            <span class="badge badge-peak">88</span>
+          </div>
+        </div>
+        <div class="cal-row">
+          <div class="cal-left">
+            <span class="dot-high"></span>
+            <div>
+              <span class="cal-date">05 Oct</span>
+              <span class="cal-dow">Mon</span>
+              <div class="cal-events"><span class="ev-tag ev-static">China Golden Week</span> </div>
+            </div>
+          </div>
+          <div class="cal-right">
+            <span class="cal-price">Studio: 1,900 THB</span><span class="cal-price">Family: 3,650 THB</span>
+            <span class="badge badge-high">78</span>
+          </div>
+        </div>
+        <div class="cal-row">
+          <div class="cal-left">
+            <span class="dot-high"></span>
+            <div>
+              <span class="cal-date">06 Oct</span>
+              <span class="cal-dow">Tue</span>
+              <div class="cal-events"><span class="ev-tag ev-static">China Golden Week</span> </div>
+            </div>
+          </div>
+          <div class="cal-right">
+            <span class="cal-price">Studio: 1,850 THB</span><span class="cal-price">Family: 3,450 THB</span>
+            <span class="badge badge-high">76</span>
+          </div>
+        </div>
+        <div class="cal-row">
+          <div class="cal-left">
+            <span class="dot-high"></span>
+            <div>
+              <span class="cal-date">07 Oct</span>
+              <span class="cal-dow">Wed</span>
+              <div class="cal-events"><span class="ev-tag ev-static">China Golden Week</span> </div>
+            </div>
+          </div>
+          <div class="cal-right">
+            <span class="cal-price">Studio: 1,850 THB</span><span class="cal-price">Family: 3,550 THB</span>
+            <span class="badge badge-high">77</span>
+          </div>
+        </div>
+        <div class="cal-row">
+          <div class="cal-left">
+            <span class="dot-high"></span>
+            <div>
+              <span class="cal-date">08 Oct</span>
+              <span class="cal-dow">Thu</span>
+              <div class="cal-events"><span class="cal-no-event">No specific event</span></div>
+            </div>
+          </div>
+          <div class="cal-right">
+            <span class="cal-price">Studio: 1,500 THB</span><span class="cal-price">Family: 2,850 THB</span>
+            <span class="badge badge-high">68</span>
+          </div>
+        </div>
+        <div class="cal-row">
+          <div class="cal-left">
+            <span class="dot-high"></span>
+            <div>
+              <span class="cal-date">09 Oct</span>
+              <span class="cal-dow">Fri</span>
+              <div class="cal-events"><span class="cal-no-event">No specific event</span></div>
+            </div>
+          </div>
+          <div class="cal-right">
+            <span class="cal-price">Studio: 1,850 THB</span><span class="cal-price">Family: 3,450 THB</span>
+            <span class="badge badge-high">76</span>
+          </div>
+        </div>
+        <div class="cal-row">
+          <div class="cal-left">
+            <span class="dot-peak"></span>
+            <div>
+              <span class="cal-date">10 Oct</span>
+              <span class="cal-dow">Sat</span>
+              <div class="cal-events"><span class="cal-no-event">No specific event</span></div>
+            </div>
+          </div>
+          <div class="cal-right">
+            <span class="cal-price">Studio: 2,000 THB</span><span class="cal-price">Family: 3,800 THB</span>
+            <span class="badge badge-peak">80</span>
+          </div>
+        </div>
+        <div class="cal-row">
+          <div class="cal-left">
+            <span class="dot-high"></span>
+            <div>
+              <span class="cal-date">11 Oct</span>
+              <span class="cal-dow">Sun</span>
+              <div class="cal-events"><span class="cal-no-event">No specific event</span></div>
+            </div>
+          </div>
+          <div class="cal-right">
+            <span class="cal-price">Studio: 1,500 THB</span><span class="cal-price">Family: 2,850 THB</span>
+            <span class="badge badge-high">68</span>
+          </div>
+        </div>
+        <div class="cal-row">
+          <div class="cal-left">
+            <span class="dot-high"></span>
+            <div>
+              <span class="cal-date">15 Oct</span>
+              <span class="cal-dow">Thu</span>
+              <div class="cal-events"><span class="cal-no-event">No specific event</span></div>
+            </div>
+          </div>
+          <div class="cal-right">
+            <span class="cal-price">Studio: 1,500 THB</span><span class="cal-price">Family: 2,850 THB</span>
+            <span class="badge badge-high">68</span>
+          </div>
+        </div>
+        <div class="cal-row">
+          <div class="cal-left">
+            <span class="dot-high"></span>
+            <div>
+              <span class="cal-date">16 Oct</span>
+              <span class="cal-dow">Fri</span>
+              <div class="cal-events"><span class="cal-no-event">No specific event</span></div>
+            </div>
+          </div>
+          <div class="cal-right">
+            <span class="cal-price">Studio: 1,850 THB</span><span class="cal-price">Family: 3,450 THB</span>
+            <span class="badge badge-high">76</span>
+          </div>
+        </div>
+        <div class="cal-row">
+          <div class="cal-left">
+            <span class="dot-peak"></span>
+            <div>
+              <span class="cal-date">17 Oct</span>
+              <span class="cal-dow">Sat</span>
+              <div class="cal-events"><span class="cal-no-event">No specific event</span></div>
+            </div>
+          </div>
+          <div class="cal-right">
+            <span class="cal-price">Studio: 2,000 THB</span><span class="cal-price">Family: 3,800 THB</span>
+            <span class="badge badge-peak">80</span>
+          </div>
+        </div></div>
 </div>
 
 <footer>
