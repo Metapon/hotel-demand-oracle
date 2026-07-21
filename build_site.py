@@ -402,7 +402,7 @@ def build_site(df: pd.DataFrame, log=print) -> None:
 <header>
   <div>
     <div class="hotel-name">BuPlace Hotel</div>
-    <div class="hotel-sub">Demand Intelligence Dashboard &nbsp;&middot;&nbsp; buplace.com</div>
+    <div class="hotel-sub">Demand Intelligence Dashboard &nbsp;&middot;&nbsp; <a href="https://buplace.com" target="_blank" rel="noopener" style="color:inherit;opacity:0.7;text-decoration:none;">buplace.com</a> &nbsp;&middot;&nbsp; <a href="https://buplace.com/shuttle" target="_blank" rel="noopener" style="color:#e76f51;text-decoration:none;font-weight:600;">🚐 Shuttle</a></div>
   </div>
   <div class="updated">Updated {last_updated}<br>180-day demand forecast</div>
 </header>
